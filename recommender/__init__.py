@@ -1,0 +1,2 @@
+class PromCrawler:
+    pass

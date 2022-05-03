@@ -1,0 +1,135 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: predictive-recommender-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - services
+  - endpoints
+  - persistentvolumeclaims
+  - serviceaccounts
+  - events
+  - configmaps
+  - secrets
+  - customresourcedefinitions
+  verbs:
+  - '*'
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - '*'
+- apiGroups:
+  - autoscaling.k8s.io
+  resources:
+  - verticalpodautoscalers
+  - verticalpodautoscalercheckpoints
+  verbs:
+  - '*'
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterrolebindings
+  verbs:
+  - '*'
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - "*"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: predictive-recommender
+  namespace: kube-system
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: predictive-recommender-role-binding
+subjects:
+- kind: ServiceAccount
+  name: predictive-recommender
+  namespace: kube-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: predictive-recommender-role
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "recommender-config"
+  namespace: "kube-system"
+data:
+  "recommender_config.yaml": |
+    RECOMMENDER_NAME: "pando"
+    DEFAULT_NAMESPACE: "default"
+    PROM_URL: "http://prometheus-k8s.monitoring.svc.cluster.local:9090"
+    PROM_TOKEN: ""
+    tree:
+      0: theta-sktime
+      1: theta-sktime
+      2: linear
+      3: linear
+      4: theta-sktime
+      5: theta-sktime
+      6: naive
+      7: naive
+      8: vpa
+      9: vpa
+      10: vpa
+      11: vpa
+      12: theta-sktime
+      13: theta-sktime
+      14: naive
+      15: naive
+    TARGET_PERCENTILE: 90
+    UPPERBOUND_PERCENTILE: 95
+    LOWERBOUND_PERCENTILE: 50
+    LIMIT: 5
+    OUTPUT: False
+    STAT_THRESHOLD: 0.01
+    THETA_THRESHOLD: 0.001
+    WINDOW_SPLITTER: 0.7
+    MAX_CHANGEPOINTS: 5
+    FORECASTING_WINDOW: 300
+    FORECASTING_SIGHT: 3600
+    SAMPLING_PERIOD: 15
+    DEFAULT_UTILIZATION: 1000
+    SLEEP_WINDOW: 120
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pando
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pando
+  template:
+    metadata:
+      labels:
+        app: pando
+    spec:
+      volumes:
+        - name: pando-config
+          configMap:
+            name: recommender-config
+      containers:
+        - name: pando
+          image: quay.io/chenw615/predictive-vpa-recommender:latest
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: pando-config
+              mountPath: /predictive-vpa-recommenders/config
+      serviceAccountName: predictive-recommender
+      serviceAccount: predictive-recommender
