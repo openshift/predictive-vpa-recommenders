@@ -1,7 +1,13 @@
 import yaml
 
-config_file = '/predictive-vpa-recommenders/config/recommender_config.yaml'
-config = yaml.load(open(config_file,"r"), Loader=yaml.FullLoader)
+try:
+    config_file = '/predictive-vpa-recommenders/config/recommender_config.yaml'
+    config = yaml.load(open(config_file,"r"), Loader=yaml.FullLoader)
+except Exception as e:
+    print(e)
+    config_file = './recommender_config.yaml'
+    config = yaml.load(open(config_file,"r"), Loader=yaml.FullLoader)
+
 
 # Retrieve the configuration for the recommender
 RECOMMENDER_NAME = config['RECOMMENDER_NAME']

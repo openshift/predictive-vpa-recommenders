@@ -1,6 +1,6 @@
 RECOMMENDER_NAME: 'pando'
 DEFAULT_NAMESPACE: 'default'
-PROM_URL: 'http://prometheus-k8s.monitoring.svc.cluster.local:9090'
+PROM_URL: 'http://localhost:9090'
 PROM_TOKEN: ''
 tree:
     0: theta-sktime

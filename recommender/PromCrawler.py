@@ -145,13 +145,19 @@ class PromCrawler:
 
 
 # Other uitlity functions for the PromCrawler class
-def construct_nested_dict(traces_dict, container, resourcetype, pod):
-    if container not in traces_dict.keys():
-        traces_dict[container] = {resourcetype: {pod: []}}
-    elif resourcetype not in traces_dict[container].keys():
-        traces_dict[container][resourcetype] = {pod: []}
-    elif pod not in traces_dict[container][resourcetype].keys():
-        traces_dict[container][resourcetype][pod] = []
+def construct_nested_dict(traces_dict, container, resourcetype, pod=None):
+    if pod is None:
+        if container not in traces_dict.keys():
+            traces_dict[container] = {resourcetype: []}
+        elif resourcetype not in traces_dict[container].keys():
+            traces_dict[container][resourcetype] = []
+    else:
+        if container not in traces_dict.keys():
+            traces_dict[container] = {resourcetype: {pod: []}}
+        elif resourcetype not in traces_dict[container].keys():
+            traces_dict[container][resourcetype] = {pod: []}
+        elif pod not in traces_dict[container][resourcetype].keys():
+            traces_dict[container][resourcetype][pod] = []
 
     return traces_dict
 

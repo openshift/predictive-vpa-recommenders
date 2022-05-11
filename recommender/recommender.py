@@ -59,6 +59,34 @@ def str2resource(resource, value):
     else:
         return value
 
+def get_target_containers(corev1_client, target_namespace, target_ref):
+    target_pods = corev1_client.list_namespaced_pod(namespace=target_namespace, label_selector="app=" + target_ref["name"])
+
+    # Retrieve the target containers
+    target_containers = []
+    for pod in target_pods.items:
+        for container in pod.spec.containers:
+            if container.name not in target_containers:
+                target_containers.append(container.name)
+
+    return target_containers
+
+
+def get_max_trace_among_pods(traces):
+    max_traces = {}
+    for container in traces.keys():
+        max_traces[container] = {}
+        for resource_type in traces[container].keys():
+            max_traces[container][resource_type] = {}
+            for pod in traces[container][resource_type].keys():
+                cur_trace = traces[container][resource_type][pod]
+                for data in cur_trace:
+                    if data[0] not in max_traces[container][resource_type].keys():
+                        max_traces[container][resource_type][data[0]] = data[1]
+                    else:
+                        max_traces[container][resource_type][data[0]] = max(data[1], max_traces[container][resource_type][data[0]])
+
+    return max_traces
 
 def get_recommendation(vpa, corev1, prom_client):
     """
@@ -76,20 +104,27 @@ def get_recommendation(vpa, corev1, prom_client):
         target_namespace = target_ref["namespace"]
     else:
         target_namespace = recommender_config.DEFAULT_NAMESPACE
-    target_pods = corev1.list_namespaced_pod(namespace=target_namespace, label_selector="app=" + target_ref["name"])
 
     # Build the prometheus query for the target resources of target containers in target pods
     namespace_query = "namespace=\'" + target_namespace + "\'"
 
-    target_pod_names = [pod.metadata.name for pod in target_pods.items]
+    # Get the target containers
+    target_containers = get_target_containers(corev1, target_namespace, target_ref)
+
+    # Get the target container traces
     traces = {}
     predictions = {}
     recommendations = []
 
     for containerPolicy in vpa_spec["resourcePolicy"]["containerPolicies"]:
-        container_query = ""
+        container_queries = []
         if containerPolicy["containerName"] != "*":
-            container_query = "container_name='" + containerPolicy["containerName"] + "'"
+            container_query = "container='" + containerPolicy["containerName"] + "'"
+            container_queries.append(container_query)
+        else:
+            for container in target_containers:
+                container_query = "container='" + container + "'"
+                container_queries.append(container_query)
 
         controlled_resources = containerPolicy["controlledResources"]
         max_allowed = containerPolicy["maxAllowed"]
@@ -103,15 +138,10 @@ def get_recommendation(vpa, corev1, prom_client):
                 print("Unsupported resource: " + resource)
                 break
 
-            # Retrieve the metrics for each pod instance
-            for pod in target_pod_names:
-                pod_query = "pod='" + pod + "'"
-
+            # Retrieve the metrics for target containers in all pods
+            for container_query in container_queries:
                 # Retrieve the metrics for the target container
-                if container_query != "":
-                    query_index = namespace_query + "," + pod_query + "," + container_query
-                else:
-                    query_index = namespace_query + "," + pod_query
+                query_index = namespace_query + "," + container_query
 
                 query = resource_query % (query_index)
                 print(query)
@@ -119,27 +149,28 @@ def get_recommendation(vpa, corev1, prom_client):
                 # Retrieve the metrics for the target container
                 traces = prom_client.get_promdata(query, traces, resource)
 
+        # Merge the traces for the target container belonging to the same pods that restarted
+        max_traces = get_max_trace_among_pods(traces)
+
         # Apply the forecasting & recommendation algorithms
-        for container in traces.keys():
-            for resource_type in traces[container].keys():
-                for pod in traces[container][resource_type].keys():
-                    metrics = np.array(traces[container][resource_type][pod], dtype=float)
-                    metrics = np.sort(metrics, axis=0)
-                    predictions = construct_nested_dict(predictions, container, resource_type, pod)
-                    forecast_window = int(recommender_config.FORECASTING_WINDOW / recommender_config.SAMPLING_PERIOD)
-                    forecast, prov, labels = pando_recommender(metrics[:, 1],
-                                                               recommender_config.TREE,
-                                                               window=forecast_window,
-                                                               limit=recommender_config.LIMIT)
-                    predictions[container][resource_type][pod] = forecast.tolist()
+        for container in max_traces.keys():
+            for resource_type in max_traces[container].keys():
+                cur_max_trace = max_traces[container][resource_type].items()
+                metrics = np.array(list(cur_max_trace), dtype=float)
+                metrics = np.sort(metrics, axis=0)
+                predictions = construct_nested_dict(predictions, container, resource_type)
+                forecast_window = int(recommender_config.FORECASTING_WINDOW / recommender_config.SAMPLING_PERIOD)
+                forecast, prov, labels = pando_recommender(metrics[:, 1],
+                                                           recommender_config.TREE,
+                                                           window=forecast_window,
+                                                           limit=recommender_config.LIMIT)
+                predictions[container][resource_type] = forecast.tolist()
 
         for container in predictions.keys():
             container_recommendation = {"containerName": container, "lowerBound": {}, "target": {},
                                         "uncappedTarget": {}, "upperBound": {}}
             for resource in predictions[container].keys():
-                all_pod_predictions = []
-                for pod in predictions[container][resource].keys():
-                    all_pod_predictions.extend(predictions[container][resource][pod])
+                all_pod_predictions = predictions[container][resource]
 
                 lower_bound = np.percentile(all_pod_predictions, recommender_config.LOWERBOUND_PERCENTILE)
                 uncapped_target = np.percentile(all_pod_predictions, recommender_config.TARGET_PERCENTILE)

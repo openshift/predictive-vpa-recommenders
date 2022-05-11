@@ -184,7 +184,9 @@ def scan(trace, max_period = 50):
     if max_period is None: max_period = len(trace) //3 # max period to be examined
 
     y_train, y_test = trace[:-test_size],trace[-test_size:]
-    period_values = range(1, max_period)
+
+    true_max_period = min(max_period, int(len(y_train)/2))
+    period_values = range(1, true_max_period)
     model = ThetaModel()
 
     for sp_val in period_values:

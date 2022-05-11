@@ -57,8 +57,8 @@ if __name__ == '__main__':
             # Update the VPA object
             # API call doc: https://github.com/kubernetes-client/python/blob/master/kubernetes/docs/CustomObjectsApi.md#patch_namespaced_custom_object
             try:
-                response = vpa_api.patch_namespaced_custom_object(group=DOMAIN, version="v1", plural=VPA_PLURAL, namespace=vpa_namespace, name=vpa_name, body=body)
-                print("Successfully patched VPA object: %s" % response)
+                vpa_updated = vpa_api.patch_namespaced_custom_object(group=DOMAIN, version="v1", plural=VPA_PLURAL, namespace=vpa_namespace, name=vpa_name, body=body)
+                print("Successfully patched VPA object with the recommendation: %s" % vpa_updated['status']['recommendation']['containerRecommendations'])
             except ApiException as e:
                 print("Exception when calling CustomObjectsApi->patch_namespaced_custom_object: %s\n" % e)
 

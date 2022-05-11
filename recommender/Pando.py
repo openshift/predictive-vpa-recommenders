@@ -17,9 +17,17 @@ from recommender.functions import perform_tests
 
 def pando_recommender(y_segment, tree, window, limit = 5):
     forecasters = {'theta':Theta_forecast, 'theta-sktime': Theta_forecast_sktime, 'naive': Naive_forecast, 'linear': lr_forecast,'arima': autoarima_forecast, 'kn': KNN_forecast, 'dt': DT_forecast, "vpa": VPA_forecast}
+    # Check y_segment length
+    if len(y_segment) < window:
+        forecast = np.zeros(window)
+        forecast[-len(y_segment):] = y_segment
+        prov = np.percentile(forecast, recommender_config.TARGET_PERCENTILE)
+        return forecast, prov, "warmup"
+
     # get label for segment
     tests = perform_tests(y_segment, recommender_config.STAT_THRESHOLD, recommender_config.THETA_THRESHOLD, recommender_config.MAX_CHANGEPOINTS)
     label = int("".join(str(int(i)) for i in tests.values()), 2)
+    print("Trace Behavior Label: {}".format(label))
 
     # get forecaster
     rec_name = tree[label]
@@ -27,6 +35,7 @@ def pando_recommender(y_segment, tree, window, limit = 5):
         logging.debug("Unseen label: {}. Proceed to apply default VPA".format(label))
         rec_name = "vpa"
     forecaster = forecasters[rec_name]
+    print("Trace Forecaster Selected: {}".format(rec_name))
 
     try:
         logging.info("Detected label: {}. Forecasting with: {}".format(label, rec_name))
