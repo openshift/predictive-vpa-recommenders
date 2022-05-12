@@ -129,6 +129,8 @@ def get_recommendation(vpa, corev1, prom_client):
         controlled_resources = containerPolicy["controlledResources"]
         max_allowed = containerPolicy["maxAllowed"]
         min_allowed = containerPolicy["minAllowed"]
+
+        prom_client.update_period(recommender_config.FORECASTING_SIGHT)
         for resource in controlled_resources:
             if resource.lower() == "cpu":
                 resource_query = "rate(container_cpu_usage_seconds_total{%s}[1m])"
@@ -157,10 +159,13 @@ def get_recommendation(vpa, corev1, prom_client):
             for resource_type in max_traces[container].keys():
                 cur_max_trace = max_traces[container][resource_type].items()
                 metrics = np.array(list(cur_max_trace), dtype=float)
-                metrics = np.sort(metrics, axis=0)
+                # metrics = np.sort(metrics, axis=0)
+                sorted_metrics_by_ts = sorted(metrics, key=lambda x: x[0])
+                ts_sorted_metrics = np.array(list(sorted_metrics_by_ts), dtype=float)
                 predictions = construct_nested_dict(predictions, container, resource_type)
                 forecast_window = int(recommender_config.FORECASTING_WINDOW / recommender_config.SAMPLING_PERIOD)
-                forecast, prov, labels = pando_recommender(metrics[:, 1],
+                print("Forecast {} resource for Container {} at {}".format(resource_type, container, prom_client.get_current_time()))
+                forecast, prov, labels = pando_recommender(ts_sorted_metrics[:, 1],
                                                            recommender_config.TREE,
                                                            window=forecast_window,
                                                            limit=recommender_config.LIMIT)

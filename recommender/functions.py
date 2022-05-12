@@ -177,7 +177,7 @@ def retrend(y, start, end, slope, intercept, type_t='mult'):
         pred = y
     return pred
 
-def scan(trace, max_period = 50):
+def scan(trace, max_period = 100):
 
     errors = []
     test_size = len(trace) //8 # size of the test set for testing cycles
@@ -262,7 +262,7 @@ class ThetaModel:
 
 
 ### Forecasters with autotunning
-def Theta_forecast(y, window, max_period=50, output=False, title=''):
+def Theta_forecast(y, window, max_period=100, output=False, title=''):
     sp, _ = scan(y, max_period)
     forecaster = ThetaModel()
     forecaster.fit(y, sp)
@@ -272,7 +272,7 @@ def Theta_forecast(y, window, max_period=50, output=False, title=''):
     if output: print("Detected period: {}".format(sp))
     return y_pred
 
-def Theta_forecast_sktime(y, window, max_period = 50, output =False, title=''):
+def Theta_forecast_sktime(y, window, max_period = 100, output =False, title=''):
     y = pd.Series(y)
     fh = np.arange(1, window+1)
     forecaster = ThetaForecaster()
@@ -285,7 +285,7 @@ def Theta_forecast_sktime(y, window, max_period = 50, output =False, title=''):
     if output: plot_series([y, y_pred], labels=["y","y_pred"], title=title)
     return y_pred.values
 
-def Naive_forecast(y, window, max_period = 50, output =False, title=''):
+def Naive_forecast(y, window, max_period = 100, output =False, title=''):
     y = pd.Series(y)
     fh = np.arange(1, window+1)
     forecaster = NaiveForecaster()

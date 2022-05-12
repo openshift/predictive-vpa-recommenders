@@ -11,18 +11,18 @@ tree:
     5: theta
     6: naive
     7: naive
-    8: vpa
-    9: vpa
-    10: vpa
+    8: theta
+    9: theta
+    10: theta
     11: theta
     12: theta
     13: theta
-    14: naive
-    15: naive
+    14: theta
+    15: theta
 
-TARGET_PERCENTILE: 90
-UPPERBOUND_PERCENTILE: 95
-LOWERBOUND_PERCENTILE: 50
+TARGET_PERCENTILE: 95
+UPPERBOUND_PERCENTILE: 100
+LOWERBOUND_PERCENTILE: 90
 LIMIT: 5 #limiting maximum provisioning with respect to past usage
 OUTPUT: False
 STAT_THRESHOLD: 0.01
@@ -33,4 +33,4 @@ FORECASTING_WINDOW: 300
 FORECASTING_SIGHT: 3600
 SAMPLING_PERIOD: 15
 DEFAULT_UTILIZATION: 1000
-SLEEP_WINDOW: 30
+SLEEP_WINDOW: 60

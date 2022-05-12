@@ -50,6 +50,9 @@ def pando_recommender(y_segment, tree, window, limit = 5):
         prov = np.percentile(y_segment, recommender_config.TARGET_PERCENTILE)
     else:
         prov = np.percentile(forecast, recommender_config.TARGET_PERCENTILE)
+
+    print("Forecasts: {}".format(forecast))
+    print("Provision: {}".format(prov))
     return forecast, prov, label
 
 def get_all_recommendation(y, tree, window = 20, sight = 240, default_usage=1000):

@@ -37,8 +37,6 @@ if __name__ == '__main__':
         vpas = crds.list_cluster_custom_object(group=DOMAIN, version="v1", plural=VPA_PLURAL)
         selectedVpas = selectsRecommender(vpas, recommender_config.RECOMMENDER_NAME)
 
-        prom_client.update_period(recommender_config.FORECASTING_SIGHT)
-
         # Retrieve the container metrics for all deployments managed by all vpas
         for vpa in selectedVpas:
             vpa_name = vpa["metadata"]["name"]

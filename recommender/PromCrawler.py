@@ -37,6 +37,10 @@ class PromCrawler:
         self.start = int(self.now - self.crawling_period)  # last hour
         self.end = self.now
 
+    def get_current_time(self):
+        current_time_str = datetime.fromtimestamp(self.now).strftime("%I:%M:%S")
+        return current_time_str
+
     def fetch_data_range(self, my_query, start, end):
         try:
             if self.prom_token:

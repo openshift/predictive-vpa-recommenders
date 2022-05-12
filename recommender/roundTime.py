@@ -1,13 +1,13 @@
 from datetime import datetime
 
-def roundTime(dt=None, roundTo=15):
+def roundTime(dt=None, roundTo=1):
 	"""Round a datetime object to any time lapse in seconds
 	dt : datetime.datetime object, default now.
-	roundTo : Closest number of seconds to round to, default 1 minute.
+	roundTo : Closest number of seconds to round to, default 15 seconds.
 	"""
 	if dt == None : dt = datetime.now()
 	seconds = dt.replace(second=0,microsecond=0).timestamp()
-	remainder = seconds % (roundTo * 60)
+	remainder = seconds % (roundTo * 15)
 	return seconds - remainder
 
 def getNowStr():
