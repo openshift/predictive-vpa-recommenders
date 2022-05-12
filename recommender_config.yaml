@@ -3,20 +3,20 @@ DEFAULT_NAMESPACE: 'default'
 PROM_URL: 'http://localhost:9090'
 PROM_TOKEN: ''
 tree:
-    0: theta-sktime
-    1: theta-sktime
+    0: theta
+    1: theta
     2: linear
-    3: linear
-    4: theta-sktime
-    5: theta-sktime
+    3: kn
+    4: theta
+    5: theta
     6: naive
     7: naive
     8: vpa
     9: vpa
     10: vpa
-    11: vpa
-    12: theta-sktime
-    13: theta-sktime
+    11: theta
+    12: theta
+    13: theta
     14: naive
     15: naive
 
@@ -33,4 +33,4 @@ FORECASTING_WINDOW: 300
 FORECASTING_SIGHT: 3600
 SAMPLING_PERIOD: 15
 DEFAULT_UTILIZATION: 1000
-SLEEP_WINDOW: 120
+SLEEP_WINDOW: 30

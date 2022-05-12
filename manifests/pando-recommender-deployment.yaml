@@ -74,22 +74,22 @@ data:
     PROM_URL: "http://prometheus-k8s.monitoring.svc.cluster.local:9090"
     PROM_TOKEN: ""
     tree:
-      0: theta-sktime
-      1: theta-sktime
-      2: linear
-      3: linear
-      4: theta-sktime
-      5: theta-sktime
-      6: naive
-      7: naive
-      8: vpa
-      9: vpa
-      10: vpa
-      11: vpa
-      12: theta-sktime
-      13: theta-sktime
-      14: naive
-      15: naive
+        0: theta
+        1: theta
+        2: linear
+        3: kn
+        4: theta
+        5: theta
+        6: naive
+        7: naive
+        8: vpa
+        9: vpa
+        10: vpa
+        11: theta
+        12: theta
+        13: theta
+        14: naive
+        15: naive
     TARGET_PERCENTILE: 90
     UPPERBOUND_PERCENTILE: 95
     LOWERBOUND_PERCENTILE: 50
@@ -103,7 +103,7 @@ data:
     FORECASTING_SIGHT: 3600
     SAMPLING_PERIOD: 15
     DEFAULT_UTILIZATION: 1000
-    SLEEP_WINDOW: 120
+    SLEEP_WINDOW: 30
 ---
 apiVersion: apps/v1
 kind: Deployment

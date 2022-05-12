@@ -82,9 +82,9 @@ def get_max_trace_among_pods(traces):
                 cur_trace = traces[container][resource_type][pod]
                 for data in cur_trace:
                     if data[0] not in max_traces[container][resource_type].keys():
-                        max_traces[container][resource_type][data[0]] = data[1]
+                        max_traces[container][resource_type][data[0]] = float(data[1])
                     else:
-                        max_traces[container][resource_type][data[0]] = max(data[1], max_traces[container][resource_type][data[0]])
+                        max_traces[container][resource_type][data[0]] = max(float(data[1]), max_traces[container][resource_type][data[0]])
 
     return max_traces
 
@@ -131,7 +131,7 @@ def get_recommendation(vpa, corev1, prom_client):
         min_allowed = containerPolicy["minAllowed"]
         for resource in controlled_resources:
             if resource.lower() == "cpu":
-                resource_query = "rate(container_cpu_usage_seconds_total{%s}[5m])"
+                resource_query = "rate(container_cpu_usage_seconds_total{%s}[1m])"
             elif resource.lower() == "memory":
                 resource_query = "container_memory_usage_bytes{%s}"
             else:
