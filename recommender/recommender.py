@@ -88,6 +88,14 @@ def get_max_trace_among_pods(traces):
 
     return max_traces
 
+def bound_var(var, min_value, max_value):
+    if var < min_value:
+        return min_value
+    elif var > max_value:
+        return max_value
+    else:
+        return var
+
 def get_recommendation(vpa, corev1, prom_client):
     """
     This function takes a VPA and returns a list of recommendations
@@ -184,14 +192,9 @@ def get_recommendation(vpa, corev1, prom_client):
                 # If the target is below the lowerbound, set it to the lowerbound
                 min_allowed_value = str2resource(resource, min_allowed[resource])
                 max_allowed_value = str2resource(resource, max_allowed[resource])
-                if uncapped_target < min_allowed_value:
-                    target = min_allowed_value
-                # If the target is above the upperbound, set it to the upperbound
-                elif uncapped_target > max_allowed_value:
-                    target = max_allowed_value
-                # Otherwise, set it to the uncapped target
-                else:
-                    target = uncapped_target
+                target = bound_var(uncapped_target, min_allowed_value, max_allowed_value)
+                lower_bound = bound_var(lower_bound, min_allowed_value, max_allowed_value)
+                upper_bound = bound_var(upper_bound, min_allowed_value, max_allowed_value)
 
                 # Convert CPU/Memory values to millicores/bytes
                 container_recommendation["lowerBound"][resource] = resource2str(resource, lower_bound)
