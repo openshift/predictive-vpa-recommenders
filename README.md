@@ -34,7 +34,7 @@ data:
 4. Obtain the thanos-querier service to allow prometheus data access for the predictive VPA recommender.
 ```bash
 PROM_SECRET=`oc get secret -n openshift-user-workload-monitoring | grep  prometheus-user-workload-token | head -n 1 | awk '{print $1 }'`
-PROM_TOKEN=`echo $(oc get secret $SECRET -n openshift-user-workload-monitoring -o json | jq -r '.data.token') | base64 -d`
+PROM_TOKEN=`echo $(oc get secret $PROM_SECRET -n openshift-user-workload-monitoring -o json | jq -r '.data.token') | base64 -d`
 PROM_HOST=`oc get route thanos-querier -n openshift-monitoring -o json | jq -r '.spec.host'`
 ```
 Replace the PROM_TOKEN and PROM_HOST with their values in `manifests/openshift/pando-recommender.yaml`.
