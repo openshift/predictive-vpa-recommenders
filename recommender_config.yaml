@@ -1,7 +1,7 @@
 RECOMMENDER_NAME: 'pando'
 DEFAULT_NAMESPACE: 'default'
-PROM_URL: 'https://thanos-querier-openshift-monitoring.apps.xxx.aws-x.ci.openshift.org'
-PROM_TOKEN: 'xxx'
+PROM_URL: 'https://thanos-querier-openshift-monitoring.apps.ci-ln-xxxxx-xxxxx.aws-2.ci.openshift.org'
+PROM_TOKEN: 'eyJhbGcxxx'
 tree:
     0: theta
     1: theta

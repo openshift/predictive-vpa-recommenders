@@ -70,7 +70,7 @@ metadata:
 data:
   "recommender_config.yaml": |
     RECOMMENDER_NAME: "pando"
-    DEFAULT_NAMESPACE: "openshift-vertical-pod-autoscaler"
+    DEFAULT_NAMESPACE: "${DEFAULT_NAMESPACE}"
     PROM_URL: "https://${PROM_HOST}"
     PROM_TOKEN: "${PROM_TOKEN}"
     tree:
@@ -126,7 +126,7 @@ spec:
             name: recommender-config
       containers:
         - name: pando
-          image: ${IMAGE_REGISTRY}/predictive-vpa-recommender:latest
+          image: quay.io/chenw615/pando-recommender:latest
           imagePullPolicy: Always
           volumeMounts:
             - name: pando-config
