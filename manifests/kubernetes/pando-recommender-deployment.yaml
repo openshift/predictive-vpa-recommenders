@@ -126,7 +126,7 @@ spec:
             name: recommender-config
       containers:
         - name: pando
-          image: ${IMAGE_REGISTRY}/predictive-vpa-recommender:latest
+          image: quay.io/chenw615/predictive-vpa-recommender:latest
           imagePullPolicy: Always
           volumeMounts:
             - name: pando-config

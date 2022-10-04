@@ -25,7 +25,10 @@ if __name__ == '__main__':
     resource_version = ''
 
     # Initialize the prometheus client
-    prom_client = PromCrawler(recommender_config.PROM_URL)
+    if recommender_config.PROM_TOKEN != "":
+        prom_client = PromCrawler(recommender_config.PROM_URL, recommender_config.PROM_TOKEN)
+    else:
+        prom_client = PromCrawler(recommender_config.PROM_URL)
 
     # Get the VPA CRD
     current_crds = [x['spec']['names']['kind'].lower() for x in v1.list_custom_resource_definition().to_dict()['items']]

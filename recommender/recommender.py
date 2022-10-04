@@ -1,4 +1,3 @@
-import recommender_config
 from recommender.Pando import *
 from recommender.PromCrawler import *
 

@@ -1,7 +1,7 @@
 RECOMMENDER_NAME: 'pando'
 DEFAULT_NAMESPACE: 'default'
-PROM_URL: 'http://prometheus-k8s.monitoring.svc.cluster.local:9090'
-PROM_TOKEN: ''
+PROM_URL: 'https://thanos-querier-openshift-monitoring.apps.xxx.aws-x.ci.openshift.org'
+PROM_TOKEN: 'xxx'
 tree:
     0: theta
     1: theta
