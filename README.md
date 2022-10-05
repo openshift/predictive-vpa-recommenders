@@ -23,7 +23,7 @@ oc apply -f manifests/examples/pando-test-periodic-recommender.yaml
 
 4. Create a SA and corresponding rolebindings for the recommender to access the metrics.
 ```bash
-oc apply -f manifests/examples/recommender-sa.yaml
+oc apply -f manifests/openshift/recommender-sa.yaml
 ```
 5. Grant the recommender SA the permission to access the metrics.
 ```bash
