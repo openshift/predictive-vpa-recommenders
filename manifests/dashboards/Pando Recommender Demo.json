@@ -25,7 +25,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1664929453169,
+  "iteration": 1664977689057,
   "links": [],
   "panels": [
     {
@@ -59,6 +59,7 @@
             "spanNulls": false
           },
           "mappings": [],
+          "max": 2,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -129,7 +130,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "exemplar": true,
-          "expr": "max(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$deployment.*\"}[1m])) by (container)",
+          "expr": "max(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$deployment.*\", container!=\"\"}[1m])) by (container)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{container}}",
@@ -182,6 +183,7 @@
             "spanNulls": false
           },
           "mappings": [],
+          "max": 512000000,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -308,6 +310,7 @@
             "spanNulls": false
           },
           "mappings": [],
+          "max": 2,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -378,7 +381,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "exemplar": true,
-          "expr": "max(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"pando-$deployment.*\"}[1m])) by (container)",
+          "expr": "max(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"pando-$deployment.*\", container!=\"\"}[1m])) by (container)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{container}}",
@@ -431,6 +434,7 @@
             "spanNulls": false
           },
           "mappings": [],
+          "max": 512000000,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -598,7 +602,7 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},

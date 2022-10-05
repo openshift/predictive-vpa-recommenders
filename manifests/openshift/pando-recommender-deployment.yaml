@@ -10,22 +10,22 @@ data:
     PROM_URL: "https://${PROM_HOST}"
     PROM_TOKEN: "${PROM_TOKEN}"
     tree:
-        0: theta
-        1: theta
-        2: linear
+        0: kn
+        1: kn
+        2: kn
         3: kn
-        4: theta
-        5: theta
+        4: kn
+        5: kn
         6: naive
         7: naive
-        8: theta
-        9: theta
-        10: theta
-        11: theta
-        12: theta
-        13: theta
-        14: theta
-        15: theta
+        8: kn
+        9: kn
+        10: kn
+        11: kn
+        12: kn
+        13: kn
+        14: kn
+        15: kn
     TARGET_PERCENTILE: 95
     UPPERBOUND_PERCENTILE: 100
     LOWERBOUND_PERCENTILE: 90

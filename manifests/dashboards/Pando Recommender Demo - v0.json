@@ -22,17 +22,14 @@
     ]
   },
   "editable": true,
-  "fiscalYearStartMonth": 0,
+  "gnetId": null,
   "graphTooltip": 0,
-  "id": 28,
+  "id": 1,
+  "iteration": 1664929453169,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -40,8 +37,6 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -49,6 +44,7 @@
             "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
+              "graph": false,
               "legend": false,
               "tooltip": false,
               "viz": false
@@ -60,14 +56,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "spanNulls": false
           },
           "mappings": [],
           "thresholds": {
@@ -128,6 +117,9 @@
         "tooltip": {
           "mode": "single",
           "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
         }
       },
       "targets": [
@@ -137,7 +129,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "exemplar": true,
-          "expr": "max(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"pando-$deployment.*\"}[1m])) by (container)",
+          "expr": "max(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$deployment.*\"}[1m])) by (container)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{container}}",
@@ -149,7 +141,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "exemplar": true,
-          "expr": "max(kube_pod_container_resource_requests{job=\"kube-state-metrics\", namespace=\"$namespace\", pod=~\"$deployment.*\", resource=\"cpu\"})",
+          "expr": "max(kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$deployment.*\", resource=\"cpu\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "Requests",
@@ -160,10 +152,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -171,8 +160,6 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -180,6 +167,7 @@
             "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
+              "graph": false,
               "legend": false,
               "tooltip": false,
               "viz": false
@@ -191,14 +179,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "spanNulls": false
           },
           "mappings": [],
           "thresholds": {
@@ -260,6 +241,9 @@
         "tooltip": {
           "mode": "single",
           "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
         }
       },
       "targets": [
@@ -294,10 +278,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -305,8 +286,6 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -314,6 +293,7 @@
             "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
+              "graph": false,
               "legend": false,
               "tooltip": false,
               "viz": false
@@ -325,14 +305,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "spanNulls": false
           },
           "mappings": [],
           "thresholds": {
@@ -393,6 +366,9 @@
         "tooltip": {
           "mode": "single",
           "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
         }
       },
       "targets": [
@@ -425,10 +401,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -436,8 +409,6 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -445,6 +416,7 @@
             "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
+              "graph": false,
               "legend": false,
               "tooltip": false,
               "viz": false
@@ -456,14 +428,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "spanNulls": false
           },
           "mappings": [],
           "thresholds": {
@@ -525,6 +490,9 @@
         "tooltip": {
           "mode": "single",
           "sort": "none"
+        },
+        "tooltipOptions": {
+          "mode": "single"
         }
       },
       "targets": [
@@ -535,7 +503,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "max(container_memory_usage_bytes{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"$namespace\", pod=~\"$deployment.*\", container!=\"\", image!=\"\"}) by (container)",
+          "expr": "max(container_memory_usage_bytes{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"$namespace\", pod=~\"pando-$deployment.*\", container!=\"\", image!=\"\"}) by (container)",
           "hide": false,
           "interval": "",
           "legendFormat": "Usage",
@@ -560,24 +528,25 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 37,
+  "schemaVersion": 27,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
+        "allValue": null,
         "current": {
           "selected": false,
           "text": "default",
           "value": "default"
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": null,
         "definition": "label_values(kube_namespace_status_phase{job=\"kube-state-metrics\"}, namespace)",
+        "description": null,
+        "error": null,
         "hide": 0,
         "includeAll": false,
+        "label": null,
         "multi": false,
         "name": "namespace",
         "options": [],
@@ -589,44 +558,52 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
-        "type": "query"
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       },
       {
+        "allValue": null,
         "current": {
           "selected": false,
-          "text": "long-periodic",
-          "value": "long-periodic"
+          "text": "test-periodic",
+          "value": "test-periodic"
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
-        "definition": "label_values(kube_deployment_created{job=\"kube-state-metrics\",  namespace=\"$namespace\"}, deployment)",
+        "datasource": null,
+        "definition": "label_values(kube_deployment_labels{namespace=\"$namespace\"}, deployment)",
+        "description": null,
+        "error": null,
         "hide": 0,
         "includeAll": false,
+        "label": null,
         "multi": false,
         "name": "deployment",
         "options": [],
         "query": {
-          "query": "label_values(kube_deployment_created{job=\"kube-state-metrics\",  namespace=\"$namespace\"}, deployment)",
+          "query": "label_values(kube_deployment_labels{namespace=\"$namespace\"}, deployment)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query"
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       }
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Pando Recommender Demo",
   "uid": "5LUlBC_7k",
-  "version": 3,
-  "weekStart": ""
+  "version": 6
 }
