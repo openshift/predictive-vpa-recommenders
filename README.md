@@ -46,3 +46,41 @@ oc create -f manifests/openshift/pando-recommender.yaml
 
 
 ### Install on Kubernetes 1.22+
+1. Clone the repository build and push to an accessible docker registry, the generated image is used [here](./manifests/kubernetes/pando-recommender-deployment.yaml) as the deployment's image.
+```bash
+git clone https://github.com/openshift/predictive-vpa-recommenders.git
+
+docker build -t registry-name.com/some_path/pred-vpa-rec:latest .
+
+docker push registry-name.com/some_path/pred-vpa-rec:latest
+```
+2. Update the prometheus settings (PROM_URL) in [here](./recommender_config.yaml) and [here](./manifests/kubernetes/pando-recommender-deployment.yaml) to match your local Kubernetes settings 
+
+3. Install VPA in Kubernetes
+To install VPA, download the source code of VPA (for example with git clone https://github.com/kubernetes/autoscaler.git) and run 
+the following command inside the vertical-pod-autoscaler directory: 
+
+```./hack/vpa-up.sh```
+
+For more details visit https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
+
+2. Install pando recommender
+```bash
+cd predictive-vpa-recommenders
+kubectl apply -f manifests/kubernetes/pando-recommender-deployment.yaml
+```
+
+3. Deploy an example workload and its VPA cr that uses default recommender.
+```bash
+kubectl apply -f manifests/examples/pando-test-periodic-deployment.yaml
+```
+
+4. Check if pando recommender is running, if so you should see some stats as below
+```bash  
+kubectl -n kube-system logs [pando_pod_name] --follow
+```
+```Successfully patched VPA object with the recommendation: [{'containerName': 'pando-test-periodic', 'lowerBound': {'cpu': '100m', 'memory': '50Mi'}, 'target': {'cpu': '100m', 'memory': '50Mi'}, 'uncappedTarget': {'cpu': '10m', 'memory': '8Mi'}, 'upperBound': {'cpu': '100m', 'memory': '50Mi'}}]```
+
+5. Check default VPA recommender, the count of VPA objects should be 0
+```bash
+kubectl logs [vpa-recommender_pod_name] -n kube-system --follow
