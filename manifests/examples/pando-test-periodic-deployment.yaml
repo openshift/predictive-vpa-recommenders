@@ -8,7 +8,7 @@ spec:
   targetRef:
     apiVersion: "apps/v1"
     kind: Deployment
-    name: test-periodic
+    name: pando-test-periodic
   resourcePolicy:
     containerPolicies:
       - containerName: '*'
